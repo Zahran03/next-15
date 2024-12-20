@@ -9,13 +9,13 @@ const SearchForm = ({ query }: { query?: string }) => {
         type="text"
         name="query"
         defaultValue={query}
-        className="serach-input"
+        className="search-input"
         placeholder="Search Stratups"
       />
 
-      <div className="felx gap-2">
+      <div className="flex gap-2">
         {query && <SearchFormReset />}
-        <button type="submit" className="search-btn">
+        <button type="submit" className="search-btn text-white">
           <Search className="size-5" />
         </button>
       </div>
