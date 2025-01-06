@@ -6,6 +6,8 @@ import MDEditor from "@uiw/react-md-editor";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { formSchema } from "@/lib/validation";
+import { z } from "zod";
+import { toast } from "@/hooks/use-toast";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -21,7 +23,35 @@ const StartupForm = () => {
         pitch,
       };
       await formSchema.parseAsync(formValues);
-    } catch (error) {}
+
+      const result = "";
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const filedErrors = error.flatten().fieldErrors;
+
+        setErrors(filedErrors as unknown as Record<string, string>);
+
+        toast({
+          title: "Error",
+          description: "Please check your inputs and try again",
+          variant: "destructive",
+        });
+
+        return { ...prevState, error: "Validation failed", status: "ERROR" };
+      }
+
+      toast({
+        title: "Error",
+        description: "An unexpected error has occurred",
+        variant: "destructive",
+      });
+
+      return {
+        ...prevState,
+        error: "An unexpected error has occurred",
+        status: "ERROR",
+      };
+    }
   };
 
   const [state, formAction, isPending] = useActionState(handleFormSubmit, {
@@ -29,7 +59,7 @@ const StartupForm = () => {
     status: "INITIAL",
   });
   return (
-    <form action={handleFormSubmit} className="startup-form">
+    <form action={formAction} className="startup-form">
       <div>
         <label htmlFor="title" className="startup-form_label">
           Title
