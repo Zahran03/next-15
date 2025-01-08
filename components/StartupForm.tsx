@@ -9,7 +9,7 @@ import { formSchema } from "@/lib/validation";
 import { z } from "zod";
 import { toast, useToast } from "@/hooks/use-toast";
 import { createPitch } from "@/lib/actions";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
